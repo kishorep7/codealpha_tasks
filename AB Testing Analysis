@@ -1,0 +1,31 @@
+import numpy as np
+from statsmodels.stats.proportion import proportions_ztest
+
+def ab_testing_analysis(success_A, n_A, success_B, n_B):
+    """
+    Conduct A/B testing analysis and print results.
+    
+    Parameters:
+    - success_A: Number of successes (e.g., clicks) in Group A
+    - n_A: Total number of visitors in Group A
+    - success_B: Number of successes (e.g., clicks) in Group B
+    - n_B: Total number of visitors in Group B
+    """
+    CR_A = (success_A / n_A) * 100
+    CR_B = (success_B / n_B) * 100
+    
+    print(f"Group A Conversion Rate: {CR_A:.2f}%")
+    print(f"Group B Conversion Rate: {CR_B:.2f}%")
+    successes = np.array([success_A, success_B])
+    trials = np.array([n_A, n_B])
+    z_stat, p_val = proportions_ztest(successes, trials)
+    print(f"Z-Statistic: {z_stat:.4f}, P-Value: {p_val:.4f}")
+    if p_val < 0.05:
+        print("Reject the null hypothesis: The change had a significant impact.")
+    else:
+        print("Fail to reject the null hypothesis: No significant impact.")
+success_A = 50  
+n_A = 1000      
+success_B = 70
+n_B = 1000   
+ab_testing_analysis(success_A, n_A, success_B, n_B)
